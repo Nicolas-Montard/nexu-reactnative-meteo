@@ -2,13 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
+import { createStaticNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export default function App() {
+
+function OtherScreen() {
+  return (
+    <View><Text>text</Text></View>
+  )
+}
+function WeatherScreen() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [weather, setWeather] = useState(null);
   const apiKey = "198a70155c23d31f52cbf6ff05f413b4";
-
 
   useEffect(() => {
     async function getCurrentLocation() {
@@ -89,3 +97,16 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
+const BottomTab = createBottomTabNavigator({
+  screens: {
+    Weather: WeatherScreen,
+    OtherScreen: OtherScreen,
+  },
+});
+
+const Navigation = createStaticNavigation(BottomTab);
+
+export default function App() {
+  return <Navigation />;
+}
